@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寵物友善餐廳體驗遊</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Baloo 2', sans-serif;
+            background-color: #fdf5e6;
+            text-align: center;
+            margin: 50px;
+        }
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #774c3d;
+        }
+        p {
+            font-size: 18px;
+            color: #5e3d29;
+        }
+        .role-selection, .restaurant-selection, .scenario, .reaction-options, .story-section {
+            margin-top: 20px;
+        }
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: #f4c2c2;
+            color: white;
+            font-family: 'Baloo 2', sans-serif;
+        }
+        button:hover {
+            background-color: #e59797;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>寵物友善餐廳體驗遊</h1>
+    <p id="role-title">請選擇你要的角色：</p>
+    
+    <div class="role-selection">
+        <button onclick="chooseRole('飼主')">飼主</button>
+        <button onclick="chooseRole('非飼主')">非飼主</button>
+    </div>
+
+    <div class="restaurant-selection hidden">
+        <p>你想去哪間餐廳呢？</p>
+        <button onclick="selectRestaurant()">餐廳 A</button>
+        <button onclick="selectRestaurant()">餐廳 B</button>
+        <button onclick="selectRestaurant()">餐廳 C</button>
+        <button onclick="selectRestaurant()">餐廳 D</button>
+    </div>
+
+    <div class="scenario hidden">
+        <p id="scenario-text"></p>
+    </div>
+
+    <div class="reaction-options hidden">
+        <p>這時候你會...？</p>
+        <button onclick="userReaction('默默忍受')">🌿 忍受不便，假裝沒事</button>
+        <button onclick="userReaction('憤而離開')">🚪 直接走人，餐點不重要</button>
+        <button onclick="userReaction('與店員反應')">🗣️ 提出意見，但店員敷衍</button>
+        <button onclick="userReaction('上網抱怨')">📱 手機一星評論伺候</button>
+    </div>
+
+    <div class="story-section hidden">
+        <p id="story-text"></p>
+        <h2>他的經歷</h2>
+        <button onclick="viewAnotherCase()">📖 觀看其他案例</button>
+        <button onclick="restartGame()">🔄 重新開始</button>
+    </div>
+
+    <script>
+        let lastScenario = "";
+
+        function chooseRole(role) {
+            document.getElementById("role-title").classList.add("hidden"); 
+            document.querySelector(".role-selection").classList.add("hidden");
+
+            if (role === "非飼主") {
+                document.querySelector(".restaurant-selection").classList.remove("hidden");
+            } else {
+                alert("你選擇了：" + role);
+            }
+        }
+
+        function selectRestaurant() {
+            const scenarios = [
+                "坐在沙發上，突然有貓咪從腳邊竄出——冷不防被萌貓攻擊！",
+                "發現有貓狗還跳上椅子，一臉自豪地佔據了你的空間。",
+                "發現有寵物跑進餐廳後廚，內心OS：食安呢？！",
+                "貓狗毛滿天飛，而且氣味濃郁——這是動物天地還是餐廳？"
+            ];
+
+            let newScenario;
+            do {
+                newScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            } while (newScenario === lastScenario);
+
+            lastScenario = newScenario;
+
+            document.querySelector(".restaurant-selection").classList.add("hidden");
+            document.querySelector(".scenario").classList.remove("hidden");
+            document.getElementById("scenario-text").innerText = newScenario;
+
+            document.querySelector(".reaction-options").classList.remove("hidden");
+        }
+
+        function userReaction(reaction) {
+            document.querySelector(".reaction-options").classList.add("hidden");
+            document.querySelector(".scenario").classList.add("hidden");
+            document.querySelector(".story-section").classList.remove("hidden");
+
+            const storyTexts = {
+                "默默忍受": "你試圖忽略環境的不適，但內心忍不住嘆氣，決定日後避開這類餐廳。",
+                "憤而離開": "你果斷起身離開，心裡盤算著下次用餐前先研究評論，避免類似情況再度發生。",
+                "與店員反應": "你向店員提出意見，但對方只是客氣地微笑，並沒有改變現況，你感覺自己被敷衍了。",
+                "上網抱怨": "你打開手機，怒氣未消，留下了一則一星評論，希望未來的客人能夠有所警惕。"
+            };
+
+            document.getElementById("story-text").innerText = storyTexts[reaction];
+        }
+
+        function restartGame() {
+            document.querySelector(".story-section").classList.add("hidden");
+            document.getElementById("role-title").classList.remove("hidden"); 
+            document.querySelector(".role-selection").classList.remove("hidden");
+        }
+
+        function viewAnotherCase() {
+            document.querySelector(".story-section").classList.add("hidden");
+            document.querySelector(".reaction-options").classList.add("hidden");
+            document.querySelector(".scenario").classList.add("hidden");
+            document.querySelector(".restaurant-selection").classList.remove("hidden");
+            selectRestaurant();
+        }
+    </script>
+
+</body>
+</html>
